@@ -22,7 +22,7 @@ import (
 func main() {
 	signerArg := flag.String("s", "", "signer ID")
 	serverAddr := flag.String("a", "localhost:8080", "server address")
-	isSim := flag.String("m", false, "is simulation mode")
+	isSim := flag.Boolean("m", false, "is simulation mode")
 	flag.Parse()
 
 	// get signer command line argument
