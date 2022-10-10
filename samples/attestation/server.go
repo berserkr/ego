@@ -31,7 +31,7 @@ func main() {
 	var report []byte
 	var err error
 
-	if isSim == "1" {
+	if *isSim == "1" {
 		os.Setenv("OE_SIMULATION", "1")
 		report, err = createSimulationReport(hash[:])
 	} else {

@@ -43,7 +43,7 @@ func main() {
 	certBytes := httpGet(tlsConfig, url+"/cert")
 	reportBytes := httpGet(tlsConfig, url+"/report")
 
-	if isSim == "1" {
+	if *isSim == "1" {
 		os.Setenv("OE_SIMULATION", "1")
 		if err := verifySimReport(reportBytes, certBytes, signer); err != nil {
 			panic(err)
