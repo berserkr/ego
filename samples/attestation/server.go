@@ -32,9 +32,9 @@ func main() {
 	var err error
 
 	if ok == true && value == 1 {
-		report, err = createSimulationReport(hash[:])
+		report, err := createSimulationReport(hash[:])
 	} else {
-		report, err = enclave.GetRemoteReport(hash[:])
+		report, err := enclave.GetRemoteReport(hash[:])
 	}
 
 	if err != nil {
@@ -76,7 +76,7 @@ func createCertificate() ([]byte, crypto.PrivateKey) {
 	return cert, priv
 }
 
-func createSimulationReport(data []byte) (Report, error) {
+func createSimulationReport(data []byte) (attestation.Report, error) {
 
 	/*
 		Please run the following in the command line:
@@ -87,11 +87,15 @@ func createSimulationReport(data []byte) (Report, error) {
 		>> 028c949707fad6d20fd5ef6b63057723016f14bba3c24577f149f3a8cf3c36bc
 
 	*/
+	id := string{"0000"}
+	signer := string{"028c949707fad6d20fd5ef6b63057723016f14bba3c24577f149f3a8cf3c36bc"}
+	prodId := Uint(1234)
+
 	return attestation.Report{
 		Data:            data,
 		SecurityVersion: 2,
 		Debug:           false,
-		UniqueID:        []string{"0000"},
-		SignerID:        []string{"028c949707fad6d20fd5ef6b63057723016f14bba3c24577f149f3a8cf3c36bc"},
-		ProductID:       []binary.LittleEndian.Uint16(1234)}, nil
+		UniqueID:        []byte(uniqueID),
+		SignerID:        []byte(signer),
+		ProductID:       []byte(prodId)}, nil
 }
