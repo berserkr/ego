@@ -8,14 +8,14 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
+	"encoding/binary"
 	"fmt"
 	"math/big"
 	"net/http"
 	"time"
-	"encoding/binary"
 
+	"github.com/edgelesssys/ego/attestation"
 	"github.com/edgelesssys/ego/enclave"
-	"github.com/edgelesssys/ego/internal/attestation"
 )
 
 func main() {
@@ -27,11 +27,13 @@ func main() {
 	hash := sha256.Sum256(cert)
 
 	// if we are in sumulation mode, let's return a byte array of the hash
+	report := nil
+	err := nil
+
 	if ok == true && value == 1 {
-		report, err := enclave.createSimulationReport(hash[:])
-	}
-	else {
-		report, err := enclave.GetRemoteReport(hash[:])
+		report, err = enclave.createSimulationReport(hash[:])
+	} else {
+		report, err = enclave.GetRemoteReport(hash[:])
 	}
 
 	if err != nil {
@@ -73,15 +75,15 @@ func createCertificate() ([]byte, crypto.PrivateKey) {
 	return cert, priv
 }
 
-func createSimulationReport([]byte data) (Report, error) {
+func createSimulationReport(data []byte) (Report, error) {
 
 	/*
-	Please run the following in the command line:
-	>> signerid=`ego signerid public.pem`
-	Then copy the contents of $signerid and enter them in SignerID. For example:
+		Please run the following in the command line:
+		>> signerid=`ego signerid public.pem`
+		Then copy the contents of $signerid and enter them in SignerID. For example:
 
-	>> echo $signerid
-	>> 028c949707fad6d20fd5ef6b63057723016f14bba3c24577f149f3a8cf3c36bc
+		>> echo $signerid
+		>> 028c949707fad6d20fd5ef6b63057723016f14bba3c24577f149f3a8cf3c36bc
 
 	*/
 	return Report{
@@ -90,5 +92,5 @@ func createSimulationReport([]byte data) (Report, error) {
 		Debug:           false,
 		UniqueID:        []string{"0000"},
 		SignerID:        []string{"028c949707fad6d20fd5ef6b63057723016f14bba3c24577f149f3a8cf3c36bc"},
-		ProductID:       []binary.LittleEndian.Uint16{1234}, nil
+		ProductID:       []binary.LittleEndian.Uint16(1234)}, nil
 }

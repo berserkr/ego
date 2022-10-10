@@ -14,7 +14,6 @@ import (
 	"net/http"
 
 	"github.com/edgelesssys/ego/attestation"
-	"github.com/edgelesssys/ego/internal/attestation"
 	"github.com/edgelesssys/ego/attestation/tcbstatus"
 	"github.com/edgelesssys/ego/eclient"
 )
@@ -49,15 +48,12 @@ func main() {
 	if ok && value == 1 {
 		if err := verifySimReport(reportBytes, certBytes, signer); err != nil {
 			panic(err)
-		}	
-	} 
-	else {
+		}
+	} else {
 		if err := verifyReport(reportBytes, certBytes, signer); err != nil {
 			panic(err)
 		}
-	
 	}
-
 
 	// Create a TLS config that uses the server certificate as root
 	// CA so that future connections to the server can be verified.
