@@ -77,25 +77,5 @@ func createCertificate() ([]byte, crypto.PrivateKey) {
 }
 
 func createSimulationReport(data []byte) (attestation.Report, error) {
-
-	/*
-		Please run the following in the command line:
-		>> signerid=`ego signerid public.pem`
-		Then copy the contents of $signerid and enter them in SignerID. For example:
-
-		>> echo $signerid
-		>> 028c949707fad6d20fd5ef6b63057723016f14bba3c24577f149f3a8cf3c36bc
-
-	*/
-	id := string{"0000"}
-	signer := string{"028c949707fad6d20fd5ef6b63057723016f14bba3c24577f149f3a8cf3c36bc"}
-	prodId := Uint(1234)
-
-	return attestation.Report{
-		Data:            data,
-		SecurityVersion: 2,
-		Debug:           false,
-		UniqueID:        []byte(uniqueID),
-		SignerID:        []byte(signer),
-		ProductID:       []byte(prodId)}, nil
+	return data, nil // just return the data
 }
