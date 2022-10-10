@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/edgelesssys/ego/attestation"
 	"github.com/edgelesssys/ego/attestation/tcbstatus"
@@ -67,9 +68,8 @@ func main() {
 
 func verifySimReport(reportBytes, certBytes, signer []byte) error {
 
-	data := reportBytes[:len(hash)]
 	hash := sha256.Sum256(certBytes)
-	if !bytes.Equal(data, hash[:]) {
+	if !bytes.Equal(reportBytes, hash[:]) {
 		return errors.New("report data does not match the certificate's hash")
 	}
 
