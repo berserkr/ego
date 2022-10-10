@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/edgelesssys/ego/attestation"
@@ -27,11 +28,11 @@ func main() {
 	hash := sha256.Sum256(cert)
 
 	// if we are in sumulation mode, let's return a byte array of the hash
-	report := nil
-	err := nil
+	var report attestation.Report
+	var err error
 
 	if ok == true && value == 1 {
-		report, err = enclave.createSimulationReport(hash[:])
+		report, err = createSimulationReport(hash[:])
 	} else {
 		report, err = enclave.GetRemoteReport(hash[:])
 	}
@@ -86,7 +87,7 @@ func createSimulationReport(data []byte) (Report, error) {
 		>> 028c949707fad6d20fd5ef6b63057723016f14bba3c24577f149f3a8cf3c36bc
 
 	*/
-	return Report{
+	return attestation.Report{
 		Data:            data,
 		SecurityVersion: 2,
 		Debug:           false,
