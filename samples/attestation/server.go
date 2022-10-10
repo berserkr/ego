@@ -13,15 +13,16 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"flag"
 
-	"github.com/edgelesssys/ego/attestation"
 	"github.com/edgelesssys/ego/enclave"
 )
 
 func main() {
 
 	isSim := flag.String("m", false, "is simulation mode")
-
+	flag.Parse()
+	
 	// Create certificate and a report that includes the certificate's hash.
 	cert, priv := createCertificate()
 	hash := sha256.Sum256(cert)
