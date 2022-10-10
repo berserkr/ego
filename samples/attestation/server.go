@@ -20,7 +20,7 @@ import (
 
 func main() {
 
-	isSim := flag.Boolean("m", "0", "is simulation mode")
+	isSim := flag.String("m", "0", "is simulation mode")
 	flag.Parse()
 
 	// Create certificate and a report that includes the certificate's hash.
