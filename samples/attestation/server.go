@@ -19,8 +19,8 @@ import (
 )
 
 func main() {
-	// Check if this is a simulation...
-	value, ok := os.LookupEnv("OE_SIMULATION")
+
+	isSim := flag.String("m", false, "is simulation mode")
 
 	// Create certificate and a report that includes the certificate's hash.
 	cert, priv := createCertificate()
@@ -30,7 +30,8 @@ func main() {
 	var report []byte
 	var err error
 
-	if ok == true && value == "1" {
+	if isSim {
+		os.Setenv("OE_SIMULATION", 1)
 		report, err = createSimulationReport(hash[:])
 	} else {
 		report, err = enclave.GetRemoteReport(hash[:])

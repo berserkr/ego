@@ -20,12 +20,9 @@ import (
 )
 
 func main() {
-
-	// Check if this is a simulation...
-	value, ok := os.LookupEnv("OE_SIMULATION")
-
 	signerArg := flag.String("s", "", "signer ID")
 	serverAddr := flag.String("a", "localhost:8080", "server address")
+	isSim := flag.String("m", false, "is simulation mode")
 	flag.Parse()
 
 	// get signer command line argument
@@ -46,7 +43,8 @@ func main() {
 	certBytes := httpGet(tlsConfig, url+"/cert")
 	reportBytes := httpGet(tlsConfig, url+"/report")
 
-	if ok && value == 1 {
+	if isSim {
+		os.Setenv("OE_SIMULATION", 1)
 		if err := verifySimReport(reportBytes, certBytes, signer); err != nil {
 			panic(err)
 		}
