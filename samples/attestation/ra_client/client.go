@@ -22,7 +22,7 @@ import (
 func main() {
 	signerArg := flag.String("s", "", "signer ID")
 	serverAddr := flag.String("a", "localhost:8080", "server address")
-	isSim := flag.Boolean("m", false, "is simulation mode")
+	isSim := flag.String("m", "0", "is simulation mode")
 	flag.Parse()
 
 	// get signer command line argument
@@ -43,8 +43,8 @@ func main() {
 	certBytes := httpGet(tlsConfig, url+"/cert")
 	reportBytes := httpGet(tlsConfig, url+"/report")
 
-	if isSim {
-		os.Setenv("OE_SIMULATION", 1)
+	if isSim == "1" {
+		os.Setenv("OE_SIMULATION", "1")
 		if err := verifySimReport(reportBytes, certBytes, signer); err != nil {
 			panic(err)
 		}
