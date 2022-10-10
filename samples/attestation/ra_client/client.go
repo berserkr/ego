@@ -67,29 +67,17 @@ func main() {
 
 func verifySimReport(reportBytes, certBytes, signer []byte) error {
 
+	data := reportBytes[:len(hash)]
 	hash := sha256.Sum256(certBytes)
-	if !bytes.Equal(report.Data[:len(hash)], hash[:]) {
+	if !bytes.Equal(data, hash[:]) {
 		return errors.New("report data does not match the certificate's hash")
 	}
-
-	// You can either verify the UniqueID or the tuple (SignerID, ProductID, SecurityVersion, Debug).
-
-	if report.SecurityVersion < 2 {
-		return errors.New("invalid security version")
-	}
-	if binary.LittleEndian.Uint16(report.ProductID) != 1234 {
-		return errors.New("invalid product")
-	}
-	if !bytes.Equal(report.SignerID, signer) {
-		return errors.New("invalid signer")
-	}
-
-	// For production, you must also verify that report.Debug == false
 
 	return nil
 }
 
 func verifyReport(reportBytes, certBytes, signer []byte) error {
+	
 	report, err := eclient.VerifyRemoteReport(reportBytes)
 	if err == attestation.ErrTCBLevelInvalid {
 		fmt.Printf("Warning: TCB level is invalid: %v\n%v\n", report.TCBStatus, tcbstatus.Explain(report.TCBStatus))
