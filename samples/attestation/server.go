@@ -8,7 +8,6 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
-	"encoding/binary"
 	"fmt"
 	"math/big"
 	"net/http"
@@ -28,13 +27,13 @@ func main() {
 	hash := sha256.Sum256(cert)
 
 	// if we are in sumulation mode, let's return a byte array of the hash
-	var report attestation.Report
+	var report []byte
 	var err error
 
-	if ok == true && value == 1 {
-		report, err := createSimulationReport(hash[:])
+	if ok == true && value == "1" {
+		report, err = createSimulationReport(hash[:])
 	} else {
-		report, err := enclave.GetRemoteReport(hash[:])
+		report, err = enclave.GetRemoteReport(hash[:])
 	}
 
 	if err != nil {
@@ -76,6 +75,6 @@ func createCertificate() ([]byte, crypto.PrivateKey) {
 	return cert, priv
 }
 
-func createSimulationReport(data []byte) (attestation.Report, error) {
+func createSimulationReport(data []byte) ([]byte, error) {
 	return data, nil // just return the data
 }
